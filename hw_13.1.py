@@ -1,3 +1,6 @@
+class CustomError(Exception):
+    pass
+
 class Human:
 
     def __init__(self, gender, age, first_name, last_name):
@@ -28,6 +31,8 @@ class Group:
         self.group = set()
 
     def add_student(self, student):
+        if len(self.group) >= 10:
+            raise CustomError("В групі має бути не більше 10 студентів")
         self.group.add(student)
 
     def delete_student(self, last_name):
@@ -44,15 +49,34 @@ class Group:
 
     def __str__(self):
         all_students = '\n'.join(str(student) for student in self.group)
-        return f'Number:{self.number}\\n {all_students} '
+        return f'Number: {self.number}\n{all_students}'
 
-st1 = Student('Male', 30, 'Steve', 'Jobs', 'AN142')
-st2 = Student('Female', 25, 'Liza', 'Taylor', 'AN145')
+
+students = [
+        Student('Male', 30, 'Steve', 'Jobs', 'AN142') ,
+        Student('Female', 25, 'Liza', 'Taylor', 'AN145') ,
+        Student('Female', 25, 'Liza1', 'Taylor', 'AN145') ,
+        Student('Female', 25, 'Liza2', 'Taylor', 'AN145') ,
+        Student('Female', 25, 'Liza3', 'Taylor', 'AN145') ,
+        Student('Female', 25, 'Liza4', 'Taylor', 'AN145') ,
+        Student('Female', 25, 'Liza5', 'Taylor', 'AN145') ,
+        Student('Female', 25, 'Liza6', 'Taylor', 'AN145') ,
+        Student('Female', 25, 'Liza7', 'Taylor', 'AN145') ,
+        Student('Female', 25, 'Liza8', 'Taylor', 'AN145') ,
+        Student('Female', 25, 'Liza9', 'Taylor', 'AN145')
+]
+
 gr = Group('PD1')
-gr.add_student(st1)
-gr.add_student(st2)
+
+for stud in students:
+        try:
+            gr.add_student(stud)
+        except Exception as e:
+            print(f"Error {e}")
+            break
+
 print(gr)
-assert str(gr.find_student('Jobs')) == str(st1), 'Test1'
+assert str(gr.find_student('Jobs')) == str(students[0]), 'Test1'
 assert gr.find_student('Jobs2') is None, 'Test2'
 assert isinstance(gr.find_student('Jobs'), Student) is True, 'Метод поиска должен возвращать экземпляр'
 
